@@ -1,0 +1,175 @@
+@import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Montserrat:wght@300&family=Nunito+Sans:wght@300&display=swap');
+
+
+$primary-color: #2a7dcc;
+$grayish-color: #727577;
+$heading-text: 'Lato', sans-serif;
+$body-text: 'Montserrat', sans-serif;
+$body-text: 'Nunito Sans', sans-serif;
+
+body {
+  font-size: 14px;
+  font-family: $body-text;
+  line-height: 1.5;
+  letter-spacing: 0.3px;
+}
+
+.section-wrapper {
+  padding: 30px 0;
+  .category-large {
+    font-family: $heading-text;
+    color: #3e3e3e;
+  }
+}
+
+.subtitle {
+  font-size: 16px;
+  font-family: $heading-text;
+  color: #3e3e3e;
+  letter-spacing: 0.4px;
+}
+
+.ant-layout {
+  .ant-layout-sider {
+    background: $primary-color;
+    .ant-menu {
+      background: $primary-color;
+      color: #fff;
+      font-size: 12px;
+      .ant-menu-item-selected {
+        background-color: #2a7dcc;
+      }
+    }
+    .ant-layout-sider-trigger {
+      background: #2974bb;
+    }
+  }
+}
+
+.notes-menu {
+  .profile {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    color: #fff;
+    margin: 10px 0 20px;
+    letter-spacing: 0.5px;
+    font-size: 12px;
+    &__user {
+      display: flex;
+      align-items: center;
+    }
+    &__options {
+      width: 25px;
+      height: 25px;
+    }
+  }
+  .notes-options {
+    font-family: $heading-text;
+    font-family: "Lato", sans-serif;
+    letter-spacing: 1.5px;
+    font-size: 12px;
+  }
+}
+
+.notes-list {
+  overflow-y: auto;
+  height: 100vh;
+  .list-filters {
+    margin-top: 20px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: $grayish-color;
+    font-size: 14px;
+    &__icons {
+      font-size: 14px;
+    }
+  }
+
+  .search {
+    margin: 5px 20px 5px;
+    input {
+      border: none;
+      background: #dfe2e6;
+    }
+    ::placeholder {
+      font-size: 12px;
+      color: rgb(150, 146, 146);
+    }
+  }
+
+  .add-note {
+    margin: 0 20px 40px;
+    font-family: $heading-text;
+    button {
+      height: 39px;
+    }
+    span {
+      letter-spacing: 1.5px;
+      font-size: 10px;
+    }
+  }
+
+  .list-item {
+    padding: 10px 20px;
+    border-top: 1px solid #c7c7c7;
+    &__meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: $grayish-color;
+    }
+    &__category {
+      display: flex;
+      align-items: center;
+    }
+    &__category {
+      &--color{
+        background: red;
+        width: 13px;
+        height: 13px;
+        display: block;
+        border-radius: 50%;
+        margin-right: 6px;
+      }
+    }
+    &__title {
+      padding: 5px 0 2px;
+      display: block;
+    }
+  }
+}
+
+.notes-body {
+  background: #fff;
+  button {
+    .ql-category {
+      display: block;
+      height: 20px;
+      width: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+  }
+}
+
+.quill {
+  .ql-container.ql-snow {
+    border: none;
+    height: 100vh;
+  }
+}
+
+#toolbar {
+  border: none;
+  .note-title {
+    margin-top: 30px;
+    text-align: center;
+    input:focus{
+      outline: none;
+    }
+  }
+}
