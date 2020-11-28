@@ -2,23 +2,25 @@ import React from 'react'
 import { Typography } from 'antd'
 const { Text } = Typography
 
-const ListItem = () => {
+const ListItem = ({ note }) => {
   return (
     <div className='list-item'>
       <div className='list-item__meta'>
         <div className='list-item__category'>
-          <span className='list-item__category--color'></span>
-          <span className='list-item__category--title'>General</span>
+          <span
+            style={{ background: note.categoryColor }}
+            className='list-item__category--color'
+          ></span>
+          <span className='list-item__category--title'>
+            {note.category.toUpperCase()}
+          </span>
         </div>
-        <div className='list-item__date'>01/11/2021</div>
+        <div className='list-item__date'>{note.date}</div>
       </div>
       <Text className='list-item__title subtitle' strong>
-        A Trip To East Europe
+        {note.title}
       </Text>
-      <div className='list-item__preview'>
-        Morte ipsum dolor sit amet, sanctus iudicabit mei ad. Dissentias
-        persequeris ei mei.
-      </div>
+      <div className='list-item__preview'>{note.description.substr(0, 90)}</div>
     </div>
   )
 }
