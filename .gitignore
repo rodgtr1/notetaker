@@ -23,4 +23,4 @@ yarn-debug.log*
 yarn-error.log*
 
 # Auth
-src/auth/config.js
+config/

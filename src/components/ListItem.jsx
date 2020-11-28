@@ -3,6 +3,7 @@ import { Typography } from 'antd'
 const { Text } = Typography
 
 const ListItem = ({ note }) => {
+  let x = String(note.date.toDate())
   return (
     <div className='list-item'>
       <div className='list-item__meta'>
@@ -15,7 +16,7 @@ const ListItem = ({ note }) => {
             {note.category.toUpperCase()}
           </span>
         </div>
-        <div className='list-item__date'>{note.date}</div>
+        <div className='list-item__date'>{x}</div>
       </div>
       <Text className='list-item__title subtitle' strong>
         {note.title}
