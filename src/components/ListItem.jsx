@@ -1,11 +1,26 @@
 import React from 'react'
 import { Typography } from 'antd'
+import { useDispatch } from 'react-redux'
+import { selectNote } from '../redux/note/noteActions'
 const { Text } = Typography
 
-const ListItem = ({ note }) => {
-  let x = String(note.date.toDate())
+const ListItem = note => {
+  const dispatch = useDispatch()
+  const timestamp = note.date.toDate()
+
+  const formatDate = date => {
+    const m = date.getMonth() + 1
+    const d = date.getDate()
+    const y = date.getFullYear()
+    return String(`${m}/${d}/${y}`)
+  }
+
   return (
-    <div className='list-item'>
+    <div
+      className='list-item'
+      onClick={() => dispatch(selectNote(note))}
+      style={{ cursor: 'pointer' }}
+    >
       <div className='list-item__meta'>
         <div className='list-item__category'>
           <span
@@ -16,7 +31,7 @@ const ListItem = ({ note }) => {
             {note.category.toUpperCase()}
           </span>
         </div>
-        <div className='list-item__date'>{x}</div>
+        <div className='list-item__date'>{formatDate(timestamp)}</div>
       </div>
       <Text className='list-item__title subtitle' strong>
         {note.title}

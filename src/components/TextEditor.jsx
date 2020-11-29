@@ -1,11 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import ReactQuill, { Quill } from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
-import { Menu, Dropdown, Typography } from 'antd'
+import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
 
 const { Title } = Typography
+const { Option } = Select
 
 // Add sizes to whitelist and register them
 const Size = Quill.import('formats/size')
@@ -65,38 +67,38 @@ class Editor extends React.Component {
     }
   }
 
+  handleSelectChange(value) {
+    console.log(`selected ${value}`)
+  }
+
   handleVisibleChange = flag => {
     this.setState({ visible: flag })
   }
 
   render() {
+    const colors = ['red', 'blue', 'black', 'yellow', 'orange', 'green']
     return (
       <div className='text-editor'>
         <div id='toolbar'>
-          <button className='ql-categoryColor'>
-            <Dropdown
-              overlay={
-                <Menu>
-                  <Menu.Item key='0'>
-                    <a href='http://www.alipay.com/'>1st menu item</a>
-                  </Menu.Item>
-                  <Menu.Item key='1'>
-                    <a href='http://www.taobao.com/'>2nd menu item</a>
-                  </Menu.Item>
-                  <Menu.Divider />
-                  <Menu.Item key='3'>3rd menu item</Menu.Item>
-                </Menu>
-              }
-              trigger={['click']}
+          <span className='ql-categoryColor'>
+            <Select
+              defaultValue=''
+              className='ql-category__option'
+              style={{ background: 'red' }}
+              onChange={this.handleSelectChange}
             >
-              <a
-                className='ant-dropdown-link'
-                onClick={e => e.preventDefault()}
-              >
-                <span className='ql-category'></span>
-              </a>
-            </Dropdown>
-          </button>
+              {colors.map((color, i) => {
+                return (
+                  <Option
+                    key={i}
+                    className='ql-category__option'
+                    style={{ background: color }}
+                    value={color}
+                  ></Option>
+                )
+              })}
+            </Select>
+          </span>
           <select className='ql-font'>
             <option value='arial' defaultValue>
               Arial
@@ -153,7 +155,10 @@ class Editor extends React.Component {
           placeholder={this.props.placeholder}
           modules={Editor.modules}
           formats={Editor.formats}
-          value={this.state.editorHtml}
+          value={
+            this.props.selectedNote ? this.props.selectedNote.description : ''
+          }
+          // value={this.state.editorHtml}
           theme={'snow'} // pass false to use minimal theme
         />
       </div>
@@ -204,4 +209,10 @@ Editor.propTypes = {
   placeholder: PropTypes.string
 }
 
-export default Editor
+function mapStateToProps(state) {
+  const { notes } = state.note
+  const selectedNote = notes && notes.filter(note => note.selected === true)
+  return { selectedNote: selectedNote ? selectedNote[0] : null }
+}
+
+export default connect(mapStateToProps)(Editor)

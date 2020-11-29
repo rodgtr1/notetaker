@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Col } from 'antd'
 import { Typography } from 'antd'
 import Search from '../components/Search'
@@ -7,11 +8,13 @@ import AddNote from '../components/AddNote'
 import ListFilters from '../components/ListFilters'
 import ListItem from '../components/ListItem'
 import firebase from '../config/firestore'
+import { showNotes } from '../redux/note/noteActions'
 
 const { Title } = Typography
 
 const ListSection = () => {
-  const [notes, setNotes] = useState('')
+  const { notes } = useSelector(state => state.note)
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -22,9 +25,8 @@ const ListSection = () => {
           id: doc.id,
           ...doc.data()
         }))
-        console.log(arrayData)
-        setNotes(arrayData)
-        //dispatch(showNotes(arrayData))
+        dispatch(showNotes(arrayData))
+        //setNotes(arrayData)
       } catch (err) {
         console.log(err)
       }
@@ -41,7 +43,7 @@ const ListSection = () => {
       <Search />
       <AddNote />
       {notes
-        ? notes.map(note => <ListItem key={note.id} note={note} />)
+        ? notes.map((note, index) => <ListItem key={index} {...note} />)
         : 'Create your first note!'}
     </Col>
   )

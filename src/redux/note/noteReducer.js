@@ -16,12 +16,22 @@ const noteReducer = (state = initialState, { type, payload }) => {
     case SHOW_NOTES:
       return {
         ...state,
-        notes: [payload]
+        notes: [...payload]
       }
     case SELECT_NOTE:
-      return
+      return {
+        ...state,
+        notes: state.notes.map(note =>
+          note.id === payload.id
+            ? { ...note, selected: true }
+            : { ...note, selected: false }
+        )
+      }
     case ADD_NOTE:
-      return
+      return {
+        ...state,
+        notes: [...state.notes, payload]
+      }
     case UPDATE_NOTE:
       return
     case FILTER_BY_TITLE:

@@ -47,6 +47,47 @@ body {
   }
 }
 
+// .ant-dropdown-menu-item > a {
+//   width: 15px;
+//   height: 15px;
+//   border-radius: 50%;
+//   padding: 0;
+//   margin:0 auto;
+//   display: flex;
+// }
+
+// .ant-select-dropdown {
+//   .ant-select-item-option-content {
+//     width: 15px;
+//     height: 15px;
+//     border-radius: 50%;
+//     padding: 5px;
+//     margin:0;
+//     display: flex;
+//   }
+// }
+
+.ql-categoryColor {
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    width: 32px;
+    padding: 0
+  }
+  .ant-select-arrow {
+    display: none;
+  }
+}
+
+
+.ant-select-item-option {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    padding: 0;
+    margin:0 auto;
+    display: flex;
+    text-indent: -9999px; 
+}
+
 .notes-menu {
   .profile {
     display: flex;
@@ -147,10 +188,16 @@ body {
   button {
     .ql-category {
       display: block;
-      height: 20px;
-      width: 20px;
-      background: red;
+      height: 15px;
+      width: 15px;
       border-radius: 50%;
+      &__option {
+        .ant-select-item-option-content {
+    border-radius: 50%;
+    padding: 5px;
+    margin: 0;
+        }
+      }
     }
   }
 }
