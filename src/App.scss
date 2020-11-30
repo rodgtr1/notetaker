@@ -37,6 +37,20 @@ body {
       background: $primary-color;
       color: #fff;
       font-size: 12px;
+      .ant-menu-item {
+        height: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: $body-text;
+        font-weight: 400;
+      }
+      .site-badge-count-4 .ant-badge-count {
+        border-radius: none;
+        background: none;
+        color: white;
+        box-shadow: none;
+      }
       .ant-menu-item-selected {
         background-color: #2a7dcc;
       }

@@ -8,6 +8,7 @@ import {
   UPDATE_NOTE,
   DELETE_NOTE,
   GET_CATEGORIES,
+  INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE
 } from './noteConstants'
 
@@ -67,6 +68,13 @@ export const getCategories = categories => {
   return {
     type: GET_CATEGORIES,
     payload: categories
+  }
+}
+
+export const incrementCategoryCount = category => {
+  return {
+    type: INCREMENT_CATEGORY_COUNT,
+    payload: category
   }
 }
 

@@ -5,7 +5,7 @@ import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
-import randomKeyGenerator from '../utils/randomKeyGenerator'
+import randomKeyGenerator from '../helpers/randomKeyGenerator'
 
 const { Title } = Typography
 const { Option } = Select
