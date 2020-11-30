@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { Layout, Menu } from 'antd'
 import Profile from '../components/Profile'
-import {connect} from 'react-redux'
-import capitalize from '../utils/capitalize'
 
 import {
   FileOutlined,
@@ -17,11 +15,11 @@ const { SubMenu } = Menu
 class MenuSection extends Component {
 
   state = {
-    collapsed: false
+    collapsed: false,
+    categories: {}
   }
 
   onCollapse = collapsed => {
-    console.log(collapsed)
     this.setState({ collapsed })
   }
 
@@ -66,15 +64,4 @@ class MenuSection extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const { notes } = state.note
-  const categories = {}
-  notes.forEach((element, index) => {
-    categories[element.category] = 1
-  });
-  console.log(categories)
-  // const categories = notes && notes.map(note => note.category)
-  return { categories: categories ? categories : null }
-}
-
-export default connect(mapStateToProps)(MenuSection)
+export default MenuSection

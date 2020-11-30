@@ -6,6 +6,7 @@ import {
   SELECT_NOTE,
   UPDATE_NOTE,
   ADD_NOTE,
+  GET_CATEGORIES,
   FILTER_BY_TITLE
 } from './noteConstants'
 
@@ -13,7 +14,8 @@ const initialState = {
   notes: '',
   searchText: '',
   loading: false,
-  error: null
+  error: null,
+  categories: []
 }
 
 const noteReducer = (state = initialState, { type, payload }) => {
@@ -58,6 +60,11 @@ const noteReducer = (state = initialState, { type, payload }) => {
       }
     case UPDATE_NOTE:
       return
+    case GET_CATEGORIES:
+      return {
+        ...state,
+        categories: payload
+      }
     case FILTER_BY_TITLE:
       return
     default:

@@ -7,6 +7,7 @@ import {
   ADD_NOTE,
   UPDATE_NOTE,
   DELETE_NOTE,
+  GET_CATEGORIES,
   FILTER_BY_TITLE
 } from './noteConstants'
 
@@ -59,6 +60,13 @@ export const deleteNote = noteId => {
   return {
     type: DELETE_NOTE,
     payload: noteId
+  }
+}
+
+export const getCategories = categories => {
+  return {
+    type: GET_CATEGORIES,
+    payload: categories
   }
 }
 

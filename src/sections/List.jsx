@@ -13,34 +13,46 @@ import NotesSkeleton from '../components/NotesSkeleton'
 import {
   getNotesBegin,
   getNotesSuccess,
-  getNotesFailure
+  getNotesFailure,
+  getCategories
 } from '../redux/note/noteActions'
 
 const { Title } = Typography
 
 const ListSection = () => {
   const { notes } = useSelector(state => state.note)
-  const loading = useSelector(state => state.loading)
   const dispatch = useDispatch()
+
+  const combineCategories = (array) => {
+    const categories = {}
+    array.forEach(element => {
+      if (!Object.keys(categories).length) {
+            categories[element.category] = 1
+          } else {
+            if (element.category in categories) {
+              categories[element.category] += 1
+            } else {
+              categories[element.category] = 1
+            }
+          }
+    })
+    dispatch(getCategories(categories))
+  }
 
   useEffect(() => {
     const fetchNotes = async () => {
       const db = firebase.firestore()
       dispatch(getNotesBegin())
-
-
-
       try {
         const data = await db.collection('notes').get()
         const arrayData = data.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }))
-        console.log(arrayData)
-        dispatch(getNotesSuccess(arrayData))
-        //setNotes(arrayData)
+        await dispatch(getNotesSuccess(arrayData))
+        await combineCategories(arrayData)
       } catch (err) {
-        dispatch(getNotesFailure(err))
+        dispatch(getNotesFailure())
         console.log(err)
       }
     }
