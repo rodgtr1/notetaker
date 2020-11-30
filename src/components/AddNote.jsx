@@ -27,7 +27,7 @@ const AddNote = () => {
           id: doc.id,
           ...doc.data()
         }))
-        dispatch(showNotes(arrayData))
+        //dispatch(showNotes(arrayData))
         // setNotes(arrayData)
       } catch (err) {
         console.log(err)

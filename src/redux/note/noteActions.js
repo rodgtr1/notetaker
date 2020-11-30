@@ -1,4 +1,7 @@
 import {
+  GET_NOTES_BEGIN,
+  GET_NOTES_SUCCESS,
+  GET_NOTES_FAILURE,
   SHOW_NOTES,
   SELECT_NOTE,
   ADD_NOTE,
@@ -7,6 +10,23 @@ import {
   FILTER_BY_TITLE
 } from './noteConstants'
 
+export const getNotesBegin = () => {
+  return {
+    type: GET_NOTES_BEGIN
+  }
+}
+export const getNotesSuccess = note => {
+  return {
+    type: GET_NOTES_SUCCESS,
+    payload: note
+  }
+}
+export const getNotesFailure = error => {
+  return {
+    type: GET_NOTES_FAILURE,
+    payload: error
+  }
+}
 export const showNotes = note => {
   return {
     type: SHOW_NOTES,

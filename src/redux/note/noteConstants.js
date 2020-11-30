@@ -1,3 +1,6 @@
+export const GET_NOTES_BEGIN = 'GET_NOTES_BEGIN'
+export const GET_NOTES_SUCCESS = 'GET_NOTES_SUCCESS'
+export const GET_NOTES_FAILURE = 'GET_NOTES_FAILURE'
 export const SHOW_NOTES = 'SHOW_NOTES'
 export const SELECT_NOTE = 'SELECT_NOTE'
 export const ADD_NOTE = 'ADD_NOTE'

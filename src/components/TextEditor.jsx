@@ -5,6 +5,7 @@ import 'react-quill/dist/quill.snow.css'
 import PropTypes from 'prop-types'
 import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
+import randomKeyGenerator from '../utils/randomKeyGenerator'
 
 const { Title } = Typography
 const { Option } = Select
@@ -147,7 +148,7 @@ class Editor extends React.Component {
             <button className='ql-video' />
           </span>
           <Title level={3} className='note-title subtitle'>
-            <EditableTitle />
+            <EditableTitle key={randomKeyGenerator()} value={this.props.selectedNote ? this.props.selectedNote.title : ''}/>
           </Title>
         </div>
         <ReactQuill

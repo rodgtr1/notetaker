@@ -1,4 +1,7 @@
 import {
+  GET_NOTES_BEGIN,
+  GET_NOTES_SUCCESS,
+  GET_NOTES_FAILURE,
   SHOW_NOTES,
   SELECT_NOTE,
   UPDATE_NOTE,
@@ -8,11 +11,32 @@ import {
 
 const initialState = {
   notes: '',
-  searchText: ''
+  searchText: '',
+  loading: false,
+  error: null
 }
 
 const noteReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case GET_NOTES_BEGIN:
+      return {
+        ...state,
+        loading: true,
+        error: null
+      }
+    case GET_NOTES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        notes: [...payload]
+      }
+    case GET_NOTES_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: [payload.error],
+        notes: []
+      }
     case SHOW_NOTES:
       return {
         ...state,
