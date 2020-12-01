@@ -21,20 +21,21 @@ const { Title } = Typography
 
 const ListSection = () => {
   const { notes } = useSelector(state => state.note)
+  const searchText = useSelector(state => state.note.searchText)
   const dispatch = useDispatch()
 
-  const combineCategories = (array) => {
+  const combineCategories = array => {
     const categories = {}
     array.forEach(element => {
       if (!Object.keys(categories).length) {
-            categories[element.category] = 1
-          } else {
-            if (element.category in categories) {
-              categories[element.category] += 1
-            } else {
-              categories[element.category] = 1
-            }
-          }
+        categories[element.category] = 1
+      } else {
+        if (element.category in categories) {
+          categories[element.category] += 1
+        } else {
+          categories[element.category] = 1
+        }
+      }
     })
     dispatch(getCategories(categories))
   }
@@ -68,7 +69,12 @@ const ListSection = () => {
       <Search />
       <AddNote />
       {notes ? (
-        notes.map((note, index) => <ListItem key={index} {...note} />)
+        notes.map(
+          (note, index) =>
+            (searchText === 0 || note.title.includes(searchText)) && (
+              <ListItem key={index} {...note} />
+            )
+        )
       ) : (
         <NotesSkeleton />
       )}

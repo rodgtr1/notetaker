@@ -8,7 +8,8 @@ import {
   ADD_NOTE,
   GET_CATEGORIES,
   INCREMENT_CATEGORY_COUNT,
-  FILTER_BY_TITLE
+  FILTER_BY_TITLE,
+  FILTER_BY_CATEGORY
 } from './noteConstants'
 
 const initialState = {
@@ -67,14 +68,28 @@ const noteReducer = (state = initialState, { type, payload }) => {
         categories: payload
       }
     case INCREMENT_CATEGORY_COUNT:
+      for (const key in state.categories) {
+        console.log(`${key} = ${state.categories[key]}`)
+      }
       return {
         ...state,
         categories: {
-          ...state.categories[payload]++
+          ...state.categories,
+          [payload]: state.categories[payload] + 1
         }
       }
     case FILTER_BY_TITLE:
-      return
+      return {
+        ...state,
+        notes: [...state.notes],
+        searchText: payload.value
+      }
+    case FILTER_BY_CATEGORY:
+      return {
+        ...state,
+        notes: [...state.notes],
+        searchText: payload.value
+      }
     default:
       return state
   }
