@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { selectNote } from '../redux/note/noteActions'
 const { Text } = Typography
 
-const ListItem = note => {
+const ListItem = (note, a) => {
   const dispatch = useDispatch()
   const timestamp = note.date.toDate()
 
@@ -14,7 +14,6 @@ const ListItem = note => {
     const y = date.getFullYear()
     return String(`${m}/${d}/${y}`)
   }
-
   return (
     <div
       className='list-item'

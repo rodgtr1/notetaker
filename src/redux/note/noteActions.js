@@ -10,7 +10,8 @@ import {
   GET_CATEGORIES,
   INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
-  FILTER_BY_CATEGORY
+  FILTER_BY_CATEGORY,
+  RESET_FILTER
 } from './noteConstants'
 
 export const getNotesBegin = () => {
@@ -86,9 +87,16 @@ export const filterByTitle = payload => {
   }
 }
 
-export const filterByCategory = payload => {
+export const filterByCategory = category => {
   return {
     type: FILTER_BY_CATEGORY,
+    payload: category
+  }
+}
+
+export const resetFilter = payload => {
+  return {
+    type: RESET_FILTER,
     payload: payload
   }
 }

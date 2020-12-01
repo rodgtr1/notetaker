@@ -22,6 +22,7 @@ const { Title } = Typography
 const ListSection = () => {
   const { notes } = useSelector(state => state.note)
   const searchText = useSelector(state => state.note.searchText)
+  const filteredCategory = useSelector(state => state.note.filteredCategory)
   const dispatch = useDispatch()
 
   const combineCategories = array => {
@@ -60,6 +61,8 @@ const ListSection = () => {
     fetchNotes()
   }, [])
 
+  useEffect(() => {}, [filteredCategory])
+
   return (
     <Col span={8} className='section-wrapper notes-list'>
       <Title className='category-large' level={3} style={{ padding: '0 20px' }}>
@@ -71,7 +74,8 @@ const ListSection = () => {
       {notes ? (
         notes.map(
           (note, index) =>
-            (searchText === 0 || note.title.includes(searchText)) && (
+            (searchText === 0 || note.title.includes(searchText)) &&
+            (!filteredCategory || note.category === filteredCategory) && (
               <ListItem key={index} {...note} />
             )
         )

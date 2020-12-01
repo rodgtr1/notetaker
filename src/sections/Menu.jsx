@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Badge } from 'antd'
 import Profile from '../components/Profile'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import capitalize from '../helpers/capitalize'
+import { filterByCategory, resetFilter } from '../redux/note/noteActions'
 
 import {
-  FileOutlined,
+  ClearOutlined,
   TagsOutlined,
   BarsOutlined,
   BgColorsOutlined
@@ -15,7 +16,6 @@ const { Sider } = Layout
 const { SubMenu } = Menu
 
 class MenuSection extends Component {
-
   state = {
     collapsed: false,
     categories: {}
@@ -45,10 +45,21 @@ class MenuSection extends Component {
           mode='inline'
         >
           <SubMenu key='sub1' icon={<BarsOutlined />} title='CATEGORIES'>
-            {categories
-            ? categories.map((category, index) => <Menu.Item key={index}>{capitalize(category[0])}<span><Badge count={category[1]} className="site-badge-count-4" />
-            </span></Menu.Item>) : <Menu.Item key={1}>No Categories</Menu.Item>
-            }
+            {categories ? (
+              categories.map((category, index) => (
+                <Menu.Item
+                  onClick={() => this.props.filterByCategory(category[0])}
+                  key={index}
+                >
+                  {capitalize(category[0])}
+                  <span>
+                    <Badge count={category[1]} className='site-badge-count-4' />
+                  </span>
+                </Menu.Item>
+              ))
+            ) : (
+              <Menu.Item key={1}>No Categories</Menu.Item>
+            )}
           </SubMenu>
           <SubMenu key='sub2' icon={<TagsOutlined />} title='TAGS'>
             <Menu.Item key='4'>Team 1</Menu.Item>
@@ -58,8 +69,8 @@ class MenuSection extends Component {
             <Menu.Item key='6'>Team 1</Menu.Item>
             <Menu.Item key='7'>Team 2</Menu.Item>
           </SubMenu>
-          <Menu.Item key='8' icon={<FileOutlined />}>
-            Files
+          <Menu.Item key='8' icon={<ClearOutlined />}>
+            <span onClick={() => this.props.resetFilter()}>Reset</span>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -67,12 +78,21 @@ class MenuSection extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  const categories = Object.entries(state.note.categories) ? Object.entries(state.note.categories
-    ) : null
-
+function mapStateToProps(state, dispatch) {
+  const categories = Object.entries(state.note.categories)
+    ? Object.entries(state.note.categories)
+    : null
   return { categories: categories }
 }
 
-export default connect(mapStateToProps)(MenuSection)
+const mapDispatchToProps = dispatch => {
+  return {
+    filterByCategory: category => {
+      dispatch(filterByCategory(category))
+    },
+    resetFilter: () => dispatch(resetFilter())
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuSection)
 // export default MenuSection
