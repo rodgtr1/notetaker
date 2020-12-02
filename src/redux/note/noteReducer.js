@@ -14,7 +14,9 @@ import {
   INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
-  RESET_FILTER
+  RESET_FILTER,
+  CHANGE_CATEGORY_COLOR,
+  CHANGE_CATEGORY
 } from './noteConstants'
 
 const initialState = {
@@ -86,10 +88,8 @@ const noteReducer = (state = initialState, { type, payload }) => {
         notes: [...state.notes, payload]
       }
     case UPDATE_NOTE_TITLE:
-      console.log(payload)
       return
     case UPDATE_NOTE_DESCRIPTION:
-      console.log(payload.description)
       return {
         ...state,
         notes: state.notes.map(note =>
@@ -98,18 +98,6 @@ const noteReducer = (state = initialState, { type, payload }) => {
             : { ...note }
         )
       }
-      // return state.notes.map((note) => {
-      //   if (note.id !== payload.id) {
-      //     // This isn't the note we care about - keep it as-is
-      //     return note
-      //   }
-    
-      //   // Otherwise, this is the one we want - return an updated value
-      //   return {
-      //     ...note,
-      //     ...payload
-      //   }
-      // })
     case GET_CATEGORIES:
       return {
         ...state,
@@ -133,6 +121,24 @@ const noteReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         filteredCategory: payload
+      }
+    case CHANGE_CATEGORY_COLOR:
+      return {
+        ...state,
+        notes: state.notes.map(note =>
+          note.id === payload.id
+            ? { ...note, categoryColor: payload.categoryColor }
+            : { ...note }
+        )
+      }
+    case CHANGE_CATEGORY:
+      return {
+        ...state,
+        notes: state.notes.map(note =>
+          note.id === payload.id
+            ? { ...note, category: payload.category }
+            : { ...note }
+        )
       }
     case RESET_FILTER:
       return {

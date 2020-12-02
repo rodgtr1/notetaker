@@ -35,7 +35,7 @@ const ListItem = (note, a) => {
       <Text className='list-item__title subtitle' strong>
         {note.title}
       </Text>
-      <div className='list-item__preview'>{note.description.substr(0, 90)}</div>
+      <div className='list-item__preview'>{note.description.substr(0, 90).replace(/(<([^>]+)>)/gi, "")}</div>
     </div>
   )
 }

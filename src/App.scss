@@ -81,10 +81,18 @@ body {
 //   }
 // }
 
+.ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background-color: #fff0;
+}
+
 .ql-categoryColor {
+  float: left;
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    width: 32px;
-    padding: 0
+    width: 15px;
+    padding: 0;
+    border: none;
+    height: 15px;
+    margin-top: -2px;
   }
   .ant-select-arrow {
     display: none;
@@ -92,15 +100,16 @@ body {
 }
 
 
-.ant-select-item-option {
+  .ql-category__option {
     width: 15px;
     height: 15px;
+    min-height: 15px;
     border-radius: 50%;
-    padding: 0;
-    margin:0 auto;
+    padding: 5px;
+    margin:5px auto;
     display: flex;
     text-indent: -9999px; 
-}
+  }
 
 .notes-menu {
   .profile {

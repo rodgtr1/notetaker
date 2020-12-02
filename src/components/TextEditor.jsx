@@ -7,8 +7,13 @@ import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
 import randomKeyGenerator from '../helpers/randomKeyGenerator'
 import { Skeleton } from 'antd'
-import { updateNoteDescription } from '../redux/note/noteActions'
+import {
+  updateNoteDescription,
+  changeCategoryColor,
+  changeCategory
+} from '../redux/note/noteActions'
 import firebase from '../config/firestore'
+import capitalize from '../helpers/capitalize'
 
 const { Title } = Typography
 const { Option } = Select
@@ -54,38 +59,34 @@ Font.whitelist = [
 ]
 Quill.register(Font, true)
 
-const WAIT_INTERVAL = 10000;
+const WAIT_INTERVAL = 2000
 
 class Editor extends React.Component {
   constructor(props) {
     super(props)
     this.state = { editorHtml: '', visible: false }
     this.handleChange = this.handleChange.bind(this)
+    this.handleCategoryColorChange = this.handleCategoryColorChange.bind(this)
+    this.handleCategoryChange = this.handleCategoryChange.bind(this)
   }
 
-  // handleChange(e, note) {
-  //   console.log(note)
-  //   //this.props.updateNoteDescription(this.props.note)
-  //   // after 2 seconds stopping it updates in firebase
-  //   //this.setState({ editorHtml: e })
-  // }
-
   // TODO add state begin, success, and failure, in class component
-  updateNote = async() => {
+  updateNote = async () => {
     const db = firebase.firestore()
     if (this.props.selectedNote) {
       const note = this.props.selectedNote
       try {
-        await db.collection('notes').doc(note.id).set({
-          category: note.category,
-          categoryColor: note.categoryColor,
-          date: firebase.firestore.Timestamp.fromDate(new Date()),
-          selected: false,
-          title: note.title,
-          description: note.description,
-
-        })
-        console.log('updated selected note')
+        await db
+          .collection('notes')
+          .doc(note.id)
+          .set({
+            category: note.category,
+            categoryColor: note.categoryColor,
+            date: firebase.firestore.Timestamp.fromDate(new Date()),
+            selected: false,
+            title: note.title,
+            description: note.description
+          })
         // await dispatch(getNotesSuccess(arrayData))
         // await combineCategories(arrayData)
       } catch (err) {
@@ -95,16 +96,17 @@ class Editor extends React.Component {
     } else if (this.props.notes) {
       const note = this.props.notes[0]
       try {
-        await db.collection('notes').doc(note.id).set({
-          category: note.category,
-          categoryColor: note.categoryColor,
-          date: firebase.firestore.Timestamp.fromDate(new Date()),
-          selected: false,
-          title: note.title,
-          description: note.description,
-
-        })
-        console.log('updated initial note')
+        await db
+          .collection('notes')
+          .doc(note.id)
+          .set({
+            category: note.category,
+            categoryColor: note.categoryColor,
+            date: firebase.firestore.Timestamp.fromDate(new Date()),
+            selected: false,
+            title: note.title,
+            description: note.description
+          })
         // await dispatch(getNotesSuccess(arrayData))
         // await combineCategories(arrayData)
       } catch (err) {
@@ -112,27 +114,30 @@ class Editor extends React.Component {
         console.log(err)
       }
     }
-
   }
 
-
-  handleChange (html) {
+  handleChange(html) {
     clearTimeout(this.timer)
 
     if (this.props.selectedNote) {
-      this.props.updateNoteDescription({id: this.props.selectedNote.id, description: html})
+      this.props.updateNoteDescription({
+        id: this.props.selectedNote.id,
+        description: html
+      })
     } else if (this.props.notes) {
-      this.props.updateNoteDescription({id: this.props.notes[0].id, description: html})
+      this.props.updateNoteDescription({
+        id: this.props.notes[0].id,
+        description: html
+      })
     }
 
-    this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL);
-    
+    this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL)
   }
 
   triggerChange() {
-    console.log('two seconds passed');
+    console.log('two seconds passed')
     this.updateNote()
-}
+  }
 
   handleMenuClick = e => {
     if (e.key === '3') {
@@ -140,8 +145,36 @@ class Editor extends React.Component {
     }
   }
 
-  handleSelectChange(value) {
-    console.log(`selected ${value}`)
+  // TODO send category color update to firestore
+  handleCategoryColorChange(value) {
+    document.querySelector(
+      '#ql-category .ant-select'
+    ).style.backgroundColor = value
+    if (this.props.selectedNote) {
+      this.props.changeCategoryColor({
+        id: this.props.selectedNote.id,
+        categoryColor: value
+      })
+    } else if (this.props.notes) {
+      this.props.changeCategoryColor({
+        id: this.props.notes[0].id,
+        categoryColor: value
+      })
+    }
+  }
+
+  handleCategoryChange(value) {
+    if (this.props.selectedNote) {
+      this.props.changeCategory({
+        id: this.props.selectedNote.id,
+        category: value
+      })
+    } else if (this.props.notes) {
+      this.props.changeCategory({
+        id: this.props.notes[0].id,
+        category: value
+      })
+    }
   }
 
   handleVisibleChange = flag => {
@@ -150,15 +183,22 @@ class Editor extends React.Component {
 
   render() {
     const colors = ['red', 'blue', 'black', 'yellow', 'orange', 'green']
+    const categories = this.props.categories
     return (
       <div className='text-editor'>
         <div id='toolbar'>
-          <span className='ql-categoryColor'>
+          <span id='ql-category' className='ql-formats ql-categoryColor'>
             <Select
               defaultValue=''
               className='ql-category__option'
-              style={{ background: 'red' }}
-              onChange={this.handleSelectChange}
+              onChange={this.handleCategoryColorChange}
+              style={
+                this.props.selectedNote
+                  ? { background: this.props.selectedNote.categoryColor }
+                  : this.props.notes[0]
+                  ? { background: this.props.notes[0].categoryColor }
+                  : { background: 'black' }
+              }
             >
               {colors.map((color, i) => {
                 return (
@@ -172,16 +212,29 @@ class Editor extends React.Component {
               })}
             </Select>
           </span>
-          <select className='ql-font'>
-            <option value='arial' defaultValue>
-              Arial
-            </option>
-            <option value='comic-sans'>Comic Sans</option>
-            <option value='courier-new'>Courier New</option>
-            <option value='georgia'>Georgia</option>
-            <option value='helvetica'>Helvetica</option>
-            <option value='lucida'>Lucida</option>
-          </select>
+          <span id='ql-category2'>
+            <Select
+              value={
+                this.props.selectedNote
+                  ? capitalize(this.props.selectedNote.category)
+                  : this.props.notes[0]
+                  ? capitalize(this.props.notes[0].category)
+                  : 'None'
+              }
+              style={{ float: 'left' }}
+              onChange={this.handleCategoryChange}
+            >
+              {categories ? (
+                categories.map((category, index) => (
+                  <Option key={index} value={category}>
+                    {category}
+                  </Option>
+                ))
+              ) : (
+                <Option value='empty'>None</Option>
+              )}
+            </Select>
+          </span>
           <select
             className='ql-header'
             defaultValue={''}
@@ -235,18 +288,6 @@ class Editor extends React.Component {
           </Title>
         </div>
         <ReactQuill
-          // onChange={() => {
-          //   this.props.selectedNote
-          //     ? this.props.updateNoteDescription(this.props.selectedNote)
-          //     : this.props.notes
-          //     ? this.props.updateNoteDescription(this.props.notes[0].description)
-          //     : console.log('nothing')
-
-          //   // this.props.selectedNote 
-          //   // ?
-          //   // this.props.updateNoteDescription(this.props.selectedNote)
-          //   // : console.log('no notes')
-          // }}
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
           modules={Editor.modules}
@@ -259,7 +300,6 @@ class Editor extends React.Component {
               ? this.props.notes[0].description
               : ''
           }
-          // value={this.state.editorHtml}
           theme={'snow'} // pass false to use minimal theme
         />
       </div>
@@ -313,11 +353,24 @@ Editor.propTypes = {
 function mapStateToProps(state) {
   const { notes } = state.note
   const selectedNote = notes && notes.filter(note => note.selected === true)
-  return { notes: notes, selectedNote: selectedNote ? selectedNote[0] : null }
+  const categories = Object.entries(state.note.categories)
+    ? Object.keys(state.note.categories)
+    : null
+  return {
+    notes: notes,
+    selectedNote: selectedNote ? selectedNote[0] : null,
+    categories: categories
+  }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
+    changeCategoryColor: value => {
+      dispatch(changeCategoryColor(value))
+    },
+    changeCategory: value => {
+      dispatch(changeCategory(value))
+    },
     updateNoteDescription: note => {
       dispatch(updateNoteDescription(note))
     }

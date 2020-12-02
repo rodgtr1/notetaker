@@ -15,7 +15,9 @@ import {
   INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
-  RESET_FILTER
+  RESET_FILTER,
+  CHANGE_CATEGORY_COLOR,
+  CHANGE_CATEGORY
 } from './noteConstants'
 
 export const getNotesBegin = () => {
@@ -118,6 +120,20 @@ export const filterByTitle = payload => {
 export const filterByCategory = category => {
   return {
     type: FILTER_BY_CATEGORY,
+    payload: category
+  }
+}
+
+export const changeCategoryColor = value => {
+  return {
+    type: CHANGE_CATEGORY_COLOR,
+    payload: value
+  }
+}
+
+export const changeCategory = category => {
+  return {
+    type: CHANGE_CATEGORY,
     payload: category
   }
 }
