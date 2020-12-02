@@ -2,10 +2,14 @@ import {
   GET_NOTES_BEGIN,
   GET_NOTES_SUCCESS,
   GET_NOTES_FAILURE,
+  UPDATE_NOTE_BEGIN,
+  UPDATE_NOTE_SUCCESS,
+  UPDATE_NOTE_FAILURE,
   SHOW_NOTES,
   SELECT_NOTE,
   ADD_NOTE,
-  UPDATE_NOTE,
+  UPDATE_NOTE_TITLE,
+  UPDATE_NOTE_DESCRIPTION,
   DELETE_NOTE,
   GET_CATEGORIES,
   INCREMENT_CATEGORY_COUNT,
@@ -31,6 +35,23 @@ export const getNotesFailure = error => {
     payload: error
   }
 }
+export const updateNoteBegin = () => {
+  return {
+    type: UPDATE_NOTE_BEGIN
+  }
+}
+export const updateNoteSuccess = note => {
+  return {
+    type: UPDATE_NOTE_SUCCESS,
+    payload: note
+  }
+}
+export const updateNoteFailure = error => {
+  return {
+    type: UPDATE_NOTE_FAILURE,
+    payload: error
+  }
+}
 export const showNotes = note => {
   return {
     type: SHOW_NOTES,
@@ -52,9 +73,16 @@ export const addNote = note => {
   }
 }
 
-export const updateNote = note => {
+export const updateNoteTitle = note => {
   return {
-    type: UPDATE_NOTE,
+    type: UPDATE_NOTE_TITLE,
+    payload: note
+  }
+}
+
+export const updateNoteDescription = note => {
+  return {
+    type: UPDATE_NOTE_DESCRIPTION,
     payload: note
   }
 }

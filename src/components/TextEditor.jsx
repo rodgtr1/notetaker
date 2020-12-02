@@ -6,6 +6,9 @@ import PropTypes from 'prop-types'
 import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
 import randomKeyGenerator from '../helpers/randomKeyGenerator'
+import { Skeleton } from 'antd'
+import { updateNoteDescription } from '../redux/note/noteActions'
+import firebase from '../config/firestore'
 
 const { Title } = Typography
 const { Option } = Select
@@ -51,6 +54,8 @@ Font.whitelist = [
 ]
 Quill.register(Font, true)
 
+const WAIT_INTERVAL = 10000;
+
 class Editor extends React.Component {
   constructor(props) {
     super(props)
@@ -58,9 +63,76 @@ class Editor extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
 
-  handleChange(html) {
-    this.setState({ editorHtml: html })
+  // handleChange(e, note) {
+  //   console.log(note)
+  //   //this.props.updateNoteDescription(this.props.note)
+  //   // after 2 seconds stopping it updates in firebase
+  //   //this.setState({ editorHtml: e })
+  // }
+
+  // TODO add state begin, success, and failure, in class component
+  updateNote = async() => {
+    const db = firebase.firestore()
+    if (this.props.selectedNote) {
+      const note = this.props.selectedNote
+      try {
+        await db.collection('notes').doc(note.id).set({
+          category: note.category,
+          categoryColor: note.categoryColor,
+          date: firebase.firestore.Timestamp.fromDate(new Date()),
+          selected: false,
+          title: note.title,
+          description: note.description,
+
+        })
+        console.log('updated selected note')
+        // await dispatch(getNotesSuccess(arrayData))
+        // await combineCategories(arrayData)
+      } catch (err) {
+        // dispatch(getNotesFailure())
+        console.log(err)
+      }
+    } else if (this.props.notes) {
+      const note = this.props.notes[0]
+      try {
+        await db.collection('notes').doc(note.id).set({
+          category: note.category,
+          categoryColor: note.categoryColor,
+          date: firebase.firestore.Timestamp.fromDate(new Date()),
+          selected: false,
+          title: note.title,
+          description: note.description,
+
+        })
+        console.log('updated initial note')
+        // await dispatch(getNotesSuccess(arrayData))
+        // await combineCategories(arrayData)
+      } catch (err) {
+        // dispatch(getNotesFailure())
+        console.log(err)
+      }
+    }
+
   }
+
+
+  handleChange (html) {
+    clearTimeout(this.timer)
+
+    if (this.props.selectedNote) {
+      this.props.updateNoteDescription({id: this.props.selectedNote.id, description: html})
+    } else if (this.props.notes) {
+      this.props.updateNoteDescription({id: this.props.notes[0].id, description: html})
+    }
+
+    this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL);
+    
+  }
+
+  triggerChange() {
+    console.log('two seconds passed');
+    this.updateNote()
+}
 
   handleMenuClick = e => {
     if (e.key === '3') {
@@ -148,16 +220,44 @@ class Editor extends React.Component {
             <button className='ql-video' />
           </span>
           <Title level={3} className='note-title subtitle'>
-            <EditableTitle key={randomKeyGenerator()} value={this.props.selectedNote ? this.props.selectedNote.title : ''}/>
+            <EditableTitle
+              key={randomKeyGenerator()}
+              value={
+                this.props.selectedNote ? (
+                  this.props.selectedNote.title
+                ) : this.props.notes ? (
+                  this.props.notes[0].title
+                ) : (
+                  <Skeleton active paragraph={{ rows: 7 }} />
+                )
+              }
+            />
           </Title>
         </div>
         <ReactQuill
+          // onChange={() => {
+          //   this.props.selectedNote
+          //     ? this.props.updateNoteDescription(this.props.selectedNote)
+          //     : this.props.notes
+          //     ? this.props.updateNoteDescription(this.props.notes[0].description)
+          //     : console.log('nothing')
+
+          //   // this.props.selectedNote 
+          //   // ?
+          //   // this.props.updateNoteDescription(this.props.selectedNote)
+          //   // : console.log('no notes')
+          // }}
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
           modules={Editor.modules}
           formats={Editor.formats}
+          // value={this.state.editorHtml}
           value={
-            this.props.selectedNote ? this.props.selectedNote.description : ''
+            this.props.selectedNote
+              ? this.props.selectedNote.description
+              : this.props.notes
+              ? this.props.notes[0].description
+              : ''
           }
           // value={this.state.editorHtml}
           theme={'snow'} // pass false to use minimal theme
@@ -213,7 +313,15 @@ Editor.propTypes = {
 function mapStateToProps(state) {
   const { notes } = state.note
   const selectedNote = notes && notes.filter(note => note.selected === true)
-  return { selectedNote: selectedNote ? selectedNote[0] : null }
+  return { notes: notes, selectedNote: selectedNote ? selectedNote[0] : null }
 }
 
-export default connect(mapStateToProps)(Editor)
+const mapDispatchToProps = dispatch => {
+  return {
+    updateNoteDescription: note => {
+      dispatch(updateNoteDescription(note))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

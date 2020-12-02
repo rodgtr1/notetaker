@@ -5,8 +5,8 @@ class EditableTitle extends Component {
     super(props)
     this.state = {
       name: props.name,
-      type: props.type || 'text',
-      value: props.value || 'Your Title',
+      type: props.type || '',
+      value: props.value || '',
       editClassName: props.editClassName,
       edit: false
     }

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNote, incrementCategoryCount, showNotes } from '../redux/note/noteActions'
+import { addNote, incrementCategoryCount } from '../redux/note/noteActions'
 import firebase from '../config/firestore'
 
 const AddNote = () => {
@@ -24,7 +24,7 @@ const AddNote = () => {
       const collection = db.collection('notes')
       await collection.add({ ...initialValues })
       dispatch(addNote(initialValues))
-      dispatch(incrementCategoryCount('general'))
+      //dispatch(incrementCategoryCount('general'))
     } catch (err) {
       console.log(err)
     }

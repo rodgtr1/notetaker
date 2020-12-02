@@ -61,6 +61,26 @@ const ListSection = () => {
     fetchNotes()
   }, [])
 
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const db = firebase.firestore()
+      dispatch(getNotesBegin())
+      try {
+        const data = await db.collection('notes').get()
+        const arrayData = data.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        await dispatch(getNotesSuccess(arrayData))
+        await combineCategories(arrayData)
+      } catch (err) {
+        dispatch(getNotesFailure())
+        console.log(err)
+      }
+    }
+    fetchNotes()
+  }, [notes.length])
+
   useEffect(() => {}, [filteredCategory])
 
   return (
@@ -72,13 +92,15 @@ const ListSection = () => {
       <Search />
       <AddNote />
       {notes ? (
-        notes.map(
-          (note, index) =>
-            (searchText === 0 || note.title.includes(searchText)) &&
-            (!filteredCategory || note.category === filteredCategory) && (
-              <ListItem key={index} {...note} />
-            )
-        )
+        notes
+          .sort((a, b) => (a.date < b.date ? 1 : -1))
+          .map(
+            (note, index) =>
+              (searchText === 0 || note.title.includes(searchText)) &&
+              (!filteredCategory || note.category === filteredCategory) && (
+                <ListItem key={index} {...note} />
+              )
+          )
       ) : (
         <NotesSkeleton />
       )}
