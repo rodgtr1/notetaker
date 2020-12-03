@@ -16,7 +16,8 @@ import {
   FILTER_BY_CATEGORY,
   RESET_FILTER,
   CHANGE_CATEGORY_COLOR,
-  CHANGE_CATEGORY
+  CHANGE_CATEGORY,
+  DELETE_NOTE
 } from './noteConstants'
 
 const initialState = {
@@ -88,7 +89,15 @@ const noteReducer = (state = initialState, { type, payload }) => {
         notes: [...state.notes, payload]
       }
     case UPDATE_NOTE_TITLE:
-      return
+      console.log(payload)
+      return {
+        ...state,
+        notes: state.notes.map(note =>
+          note.id === payload.id
+            ? { ...note, title: payload.title }
+            : { ...note }
+        )
+      }
     case UPDATE_NOTE_DESCRIPTION:
       return {
         ...state,
@@ -97,6 +106,11 @@ const noteReducer = (state = initialState, { type, payload }) => {
             ? { ...note, description: payload.description }
             : { ...note }
         )
+      }
+    case DELETE_NOTE:
+      return {
+        ...state,
+        notes: state.notes.filter(note => note.id !== payload)
       }
     case GET_CATEGORIES:
       return {

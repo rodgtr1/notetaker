@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, Menu, Badge } from 'antd'
+import { Layout, Menu, Badge, Modal } from 'antd'
 import Profile from '../components/Profile'
 import { connect } from 'react-redux'
 import capitalize from '../helpers/capitalize'
@@ -9,7 +9,8 @@ import {
   ClearOutlined,
   TagsOutlined,
   BarsOutlined,
-  BgColorsOutlined
+  BgColorsOutlined,
+  PlusOutlined
 } from '@ant-design/icons'
 
 const { Sider } = Layout
@@ -18,16 +19,43 @@ const { SubMenu } = Menu
 class MenuSection extends Component {
   state = {
     collapsed: false,
-    categories: {}
+    categories: {},
+    isModalVisible: false
   }
 
   onCollapse = collapsed => {
     this.setState({ collapsed })
   }
 
+  handleOk = () => {
+    this.setState({ isModalVisible: false })
+  }
+
+  handleCancel = () => {
+    this.setState({ isModalVisible: false })
+  }
+
+  showCategoryModal = () => {
+    this.setState({ isModalVisible: !this.state.isModalVisible })
+  }
+
+  componentDidMount() {
+    document
+      .getElementById('tags-plus')
+      .addEventListener('click', this.showCategoryModal)
+  }
+
+  componentWillUnmount() {
+    document
+      .getElementById('tags-plus')
+      .removeEventListener('click', this.showCategoryModal)
+  }
+
   render() {
     const { collapsed } = this.state
+    const { isModalVisible } = this.state
     const categories = this.props.categories
+
     return (
       <Sider
         className='notes-menu'
@@ -37,6 +65,16 @@ class MenuSection extends Component {
         style={{ padding: '20px 0' }}
       >
         <Profile />
+        <Modal
+          title='Basic Modal'
+          visible={isModalVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+          <p>Some contents...</p>
+        </Modal>
         <Menu
           inlineIndent={20}
           className='notes-options'
@@ -44,7 +82,7 @@ class MenuSection extends Component {
           defaultOpenKeys={['sub1']}
           mode='inline'
         >
-          <SubMenu key='sub1' icon={<BarsOutlined />} title='CATEGORIES'>
+          <SubMenu key='sub1' title='CATEGORIES'>
             {categories ? (
               categories.map((category, index) => (
                 <Menu.Item
@@ -61,11 +99,14 @@ class MenuSection extends Component {
               <Menu.Item key={1}>No Categories</Menu.Item>
             )}
           </SubMenu>
-          <SubMenu key='sub2' icon={<TagsOutlined />} title='TAGS'>
+          <span>
+            <PlusOutlined id='tags-plus' />
+          </span>
+          <SubMenu key='sub2' title='TAGS'>
             <Menu.Item key='4'>Team 1</Menu.Item>
             <Menu.Item key='5'>Team 2</Menu.Item>
           </SubMenu>
-          <SubMenu key='sub3' icon={<BgColorsOutlined />} title='COLORS'>
+          <SubMenu key='sub3' title='COLORS'>
             <Menu.Item key='6'>Team 1</Menu.Item>
             <Menu.Item key='7'>Team 2</Menu.Item>
           </SubMenu>

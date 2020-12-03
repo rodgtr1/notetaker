@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-
 class EditableTitle extends Component {
   constructor(props) {
     super(props)
@@ -35,10 +34,12 @@ class EditableTitle extends Component {
           }}
           onBlur={event => {
             this.setState({ edit: false })
+            this.props.titleChange(event)
           }}
           onKeyUp={event => {
             if (event.key === 'Escape') {
               this.setState({ edit: false, value: this.state.backup })
+              this.props.titleChange(event)
             }
           }}
         />

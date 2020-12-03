@@ -7,10 +7,13 @@ import { Typography, Select } from 'antd'
 import EditableTitle from '../components/EditableTitle'
 import randomKeyGenerator from '../helpers/randomKeyGenerator'
 import { Skeleton } from 'antd'
+import { DeleteFilled } from '@ant-design/icons'
 import {
   updateNoteDescription,
+  updateNoteTitle,
   changeCategoryColor,
-  changeCategory
+  changeCategory,
+  deleteNote
 } from '../redux/note/noteActions'
 import firebase from '../config/firestore'
 import capitalize from '../helpers/capitalize'
@@ -66,22 +69,24 @@ class Editor extends React.Component {
     super(props)
     this.state = { editorHtml: '', visible: false }
     this.handleChange = this.handleChange.bind(this)
+    this.handleTitleChange = this.handleTitleChange.bind(this)
     this.handleCategoryColorChange = this.handleCategoryColorChange.bind(this)
     this.handleCategoryChange = this.handleCategoryChange.bind(this)
   }
 
-  // TODO add state begin, success, and failure, in class component
-  updateNote = async () => {
+  updateNote = async (cat = null, catColor = null, value = null) => {
     const db = firebase.firestore()
     if (this.props.selectedNote) {
       const note = this.props.selectedNote
+      const category = cat ? value : note.category
+      const categoryColor = catColor ? value : note.categoryColor
       try {
         await db
           .collection('notes')
           .doc(note.id)
           .set({
-            category: note.category,
-            categoryColor: note.categoryColor,
+            category: category,
+            categoryColor: categoryColor,
             date: firebase.firestore.Timestamp.fromDate(new Date()),
             selected: false,
             title: note.title,
@@ -95,13 +100,15 @@ class Editor extends React.Component {
       }
     } else if (this.props.notes) {
       const note = this.props.notes[0]
+      const category = cat ? value : note.category
+      const categoryColor = catColor ? value : note.categoryColor
       try {
         await db
           .collection('notes')
           .doc(note.id)
           .set({
-            category: note.category,
-            categoryColor: note.categoryColor,
+            category: category,
+            categoryColor: categoryColor,
             date: firebase.firestore.Timestamp.fromDate(new Date()),
             selected: false,
             title: note.title,
@@ -111,6 +118,27 @@ class Editor extends React.Component {
         // await combineCategories(arrayData)
       } catch (err) {
         // dispatch(getNotesFailure())
+        console.log(err)
+      }
+    }
+  }
+
+  deleteNote = async () => {
+    const db = firebase.firestore()
+    if (this.props.selectedNote) {
+      const note = this.props.selectedNote
+      try {
+        await db.collection('notes').doc(note.id).delete()
+        await this.props.deleteNote(note.id)
+      } catch (err) {
+        console.log(err)
+      }
+    } else if (this.props.notes) {
+      const note = this.props.notes[0]
+      try {
+        await db.collection('notes').doc(note.id).delete()
+        await this.props.deleteNote(note.id)
+      } catch (err) {
         console.log(err)
       }
     }
@@ -134,6 +162,24 @@ class Editor extends React.Component {
     this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL)
   }
 
+  // TODO send title change to database
+  handleTitleChange(e) {
+    //clearTimeout(this.timer)
+    if (this.props.selectedNote) {
+      this.props.updateNoteTitle({
+        id: this.props.selectedNote.id,
+        title: e.target.value
+      })
+    } else if (this.props.notes) {
+      this.props.updateNoteTitle({
+        id: this.props.notes[0].id,
+        title: e.target.value
+      })
+    }
+
+    //this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL)
+  }
+
   triggerChange() {
     console.log('two seconds passed')
     this.updateNote()
@@ -145,7 +191,6 @@ class Editor extends React.Component {
     }
   }
 
-  // TODO send category color update to firestore
   handleCategoryColorChange(value) {
     document.querySelector(
       '#ql-category .ant-select'
@@ -155,11 +200,13 @@ class Editor extends React.Component {
         id: this.props.selectedNote.id,
         categoryColor: value
       })
+      this.updateNote(null, 'categoryColor', value)
     } else if (this.props.notes) {
       this.props.changeCategoryColor({
         id: this.props.notes[0].id,
         categoryColor: value
       })
+      this.updateNote(null, 'categoryColor', value)
     }
   }
 
@@ -169,11 +216,13 @@ class Editor extends React.Component {
         id: this.props.selectedNote.id,
         category: value
       })
+      this.updateNote(this.props.selectedNote.id, 'category', value)
     } else if (this.props.notes) {
       this.props.changeCategory({
         id: this.props.notes[0].id,
         category: value
       })
+      this.updateNote('category', null, value)
     }
   }
 
@@ -272,21 +321,32 @@ class Editor extends React.Component {
             <button className='ql-image' />
             <button className='ql-video' />
           </span>
-          <Title level={3} className='note-title subtitle'>
-            <EditableTitle
-              key={randomKeyGenerator()}
-              value={
-                this.props.selectedNote ? (
-                  this.props.selectedNote.title
-                ) : this.props.notes ? (
-                  this.props.notes[0].title
-                ) : (
-                  <Skeleton active paragraph={{ rows: 7 }} />
-                )
-              }
+          <span className='ql-formats'>
+            <DeleteFilled
+              onClick={this.deleteNote}
+              style={{ color: '#ea1e1e', fontSize: '16px' }}
             />
-          </Title>
+          </span>
         </div>
+        <Title
+          level={3}
+          style={{ textAlign: 'center', paddingTop: '20px' }}
+          className='note-title subtitle'
+        >
+          <EditableTitle
+            key={randomKeyGenerator()}
+            titleChange={this.handleTitleChange}
+            value={
+              this.props.selectedNote ? (
+                this.props.selectedNote.title
+              ) : this.props.notes ? (
+                this.props.notes[0].title
+              ) : (
+                <Skeleton active paragraph={{ rows: 7 }} />
+              )
+            }
+          />
+        </Title>
         <ReactQuill
           onChange={this.handleChange}
           placeholder={this.props.placeholder}
@@ -373,6 +433,12 @@ const mapDispatchToProps = dispatch => {
     },
     updateNoteDescription: note => {
       dispatch(updateNoteDescription(note))
+    },
+    updateNoteTitle: note => {
+      dispatch(updateNoteTitle(note))
+    },
+    deleteNote: noteId => {
+      dispatch(deleteNote(noteId))
     }
   }
 }

@@ -1,7 +1,6 @@
 @import '~antd/dist/antd.css';
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@900&family=Montserrat:wght@300&family=Nunito+Sans:wght@300&display=swap');
 
-
 $primary-color: #2a7dcc;
 $grayish-color: #727577;
 $heading-text: 'Lato', sans-serif;
@@ -38,7 +37,7 @@ body {
       color: #fff;
       font-size: 12px;
       .ant-menu-item {
-        height: 20px;
+        height: px;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -54,6 +53,17 @@ body {
       .ant-menu-item-selected {
         background-color: #2a7dcc;
       }
+      .ant-menu-submenu-arrow {
+        display: none;
+      }
+      span.anticon.anticon-plus {
+        position: absolute;
+        right: 19px;
+        margin-top: 16px;
+        font-size: 12px;
+        z-index: 9999;
+        cursor: pointer;
+    }
     }
     .ant-layout-sider-trigger {
       background: #2974bb;
@@ -61,25 +71,9 @@ body {
   }
 }
 
-// .ant-dropdown-menu-item > a {
-//   width: 15px;
-//   height: 15px;
-//   border-radius: 50%;
-//   padding: 0;
-//   margin:0 auto;
-//   display: flex;
-// }
-
-// .ant-select-dropdown {
-//   .ant-select-item-option-content {
-//     width: 15px;
-//     height: 15px;
-//     border-radius: 50%;
-//     padding: 5px;
-//     margin:0;
-//     display: flex;
-//   }
-// }
+.ant-select {
+  font-size: 13px;
+}
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   background-color: #fff0;
@@ -88,10 +82,10 @@ body {
 .ql-categoryColor {
   float: left;
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    width: 15px;
+    width:16px;
     padding: 0;
     border: none;
-    height: 15px;
+    height: 16px;
     margin-top: -2px;
   }
   .ant-select-arrow {
@@ -99,17 +93,32 @@ body {
   }
 }
 
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  border-color: rgb(218, 213, 213);
+  border-right-width: 1px !important;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
 
-  .ql-category__option {
-    width: 15px;
-    height: 15px;
-    min-height: 15px;
-    border-radius: 50%;
-    padding: 5px;
-    margin:5px auto;
-    display: flex;
-    text-indent: -9999px; 
-  }
+.ant-select-single .ant-select-selector .ant-select-selection-item, .ant-select-single .ant-select-selector .ant-select-selection-placeholder {
+  line-height: 24px;
+}
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  height: 24px;
+}
+
+.ql-category__option {
+  width: 16px;
+  height: 16px;
+  min-height: 16px;
+  border-radius: 50%;
+  padding: 5px;
+  margin: 5px auto;
+  display: flex;
+  text-indent: -9999px;
+}
 
 .notes-menu {
   .profile {
@@ -131,7 +140,7 @@ body {
   }
   .notes-options {
     font-family: $heading-text;
-    font-family: "Lato", sans-serif;
+    font-family: 'Lato', sans-serif;
     letter-spacing: 1.5px;
     font-size: 12px;
   }
@@ -191,7 +200,7 @@ body {
       align-items: center;
     }
     &__category {
-      &--color{
+      &--color {
         width: 13px;
         height: 13px;
         display: block;
@@ -211,17 +220,24 @@ body {
   button {
     .ql-category {
       display: block;
-      height: 15px;
-      width: 15px;
+      height: 16px;
+      width: 16px;
       border-radius: 50%;
       &__option {
         .ant-select-item-option-content {
-    border-radius: 50%;
-    padding: 5px;
-    margin: 0;
+          border-radius: 50%;
+          padding: 5px;
+          margin: 0;
         }
       }
     }
+  }
+}
+
+#ql-category2 {
+  .ant-select-arrow {
+    height: 12px;
+    top: 58%;
   }
 }
 
@@ -232,83 +248,17 @@ body {
   }
 }
 
+.ql-snow .ql-picker {
+  font-size: 13px;
+}
+
 #toolbar {
   border: none;
   .note-title {
     margin-top: 30px;
     text-align: center;
-    input:focus{
+    input:focus {
       outline: none;
     }
-  }
-}
-
-/* Dots Loading Animation */
-.dots-loading {
-  margin: 0 auto;
-  text-align: center;
-}
-
-.dots-loading::before,
-.dots-loading::after {
-  content: " ";
-}
-
-.dots-loading div,
-.dots-loading::before,
-.dots-loading::after {
-  margin: 35px 5px;
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: #c4c4c4;
-  opacity: 0;
-}
-
-.dots-loading::before {
-  -moz-animation: opacitychange 1s ease-in-out infinite;
-  -webkit-animation: opacitychange 1s ease-in-out infinite;
-  -o-animation: opacitychange 1s ease-in-out infinite;
-  animation: opacitychange 1s ease-in-out infinite;
-}
-
-.dots-loading div {
-  -moz-animation: opacitychange 1s ease-in-out 0.33s infinite;
-  -webkit-animation: opacitychange 1s ease-in-out 0.33s infinite;
-  -o-animation: opacitychange 1s ease-in-out 0.33s infinite;
-  animation: opacitychange 1s ease-in-out 0.33s infinite;
-  -webkit-animation-fill-mode: infinite;
-  animation-fill-mode: infinite;
-}
-
-.dots-loading::after {
-  -moz-animation: opacitychange 1s ease-in-out 0.66s infinite;
-  -webkit-animation: opacitychange 1s ease-in-out 0.66s infinite;
-  -o-animation: opacitychange 1s ease-in-out 0.66s infinite;
-  animation: opacitychange 1s ease-in-out 0.66s infinite;
-  -webkit-animation-fill-mode: infinite;
-  animation-fill-mode: infinite;
-}
-
-@keyframes opacitychange {
-  0%,
-  100% {
-    opacity: 0;
-  }
-
-  60% {
-    opacity: 1;
-  }
-}
-
-@-webkit-keyframes opacitychange {
-  0%,
-  100% {
-    opacity: 0;
-  }
-
-  60% {
-    opacity: 1;
   }
 }
