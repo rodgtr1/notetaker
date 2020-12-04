@@ -133,7 +133,7 @@ const noteReducer = (state = initialState, { type, payload }) => {
             : { ...note }
         ),
         categories: Object.fromEntries(
-          Object.entries(state.categories).filter(([key]) => key != payload)
+          Object.entries(state.categories).filter(([key]) => key !== payload)
         )
       }
     case INCREMENT_CATEGORY_COUNT:

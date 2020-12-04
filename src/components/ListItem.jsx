@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Typography } from 'antd'
 import { useDispatch } from 'react-redux'
 import { selectNote } from '../redux/note/noteActions'

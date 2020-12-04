@@ -64,6 +64,7 @@ const ListSection = () => {
       }
     }
     fetchNotes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -84,6 +85,7 @@ const ListSection = () => {
       }
     }
     fetchNotes()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notes.length])
 
   useEffect(() => {}, [filteredCategory])
@@ -91,9 +93,6 @@ const ListSection = () => {
   return (
     <Col span={8} className='section-wrapper notes-list'>
       <Title className='category-large' level={3} style={{ padding: '0 20px' }}>
-        {selectedNote && selectedNote.length
-          ? console.log('first' + selectedNote)
-          : console.log('second' + notes)}
         {selectedNote && selectedNote.length
           ? capitalize(selectedNote[0].category)
           : notes[0]

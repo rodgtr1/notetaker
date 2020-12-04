@@ -94,10 +94,7 @@ class Editor extends React.Component {
             title: note.title,
             description: note.description
           })
-        // await dispatch(getNotesSuccess(arrayData))
-        // await combineCategories(arrayData)
       } catch (err) {
-        // dispatch(getNotesFailure())
         console.log(err)
       }
     } else if (this.props.notes) {
@@ -116,10 +113,7 @@ class Editor extends React.Component {
             title: note.title,
             description: note.description
           })
-        // await dispatch(getNotesSuccess(arrayData))
-        // await combineCategories(arrayData)
       } catch (err) {
-        // dispatch(getNotesFailure())
         console.log(err)
       }
     }
@@ -164,7 +158,6 @@ class Editor extends React.Component {
     this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL)
   }
 
-  // TODO send title change to database
   handleTitleChange(e) {
     //clearTimeout(this.timer)
     if (this.props.selectedNote) {
@@ -178,12 +171,9 @@ class Editor extends React.Component {
         title: e.target.value
       })
     }
-
-    //this.timer = setTimeout(this.updateNote.bind(this), WAIT_INTERVAL)
   }
 
   triggerChange() {
-    console.log('two seconds passed')
     this.updateNote()
   }
 
@@ -358,7 +348,6 @@ class Editor extends React.Component {
           placeholder={this.props.placeholder}
           modules={Editor.modules}
           formats={Editor.formats}
-          // value={this.state.editorHtml}
           value={
             this.props.selectedNote
               ? this.props.selectedNote.description
@@ -366,7 +355,7 @@ class Editor extends React.Component {
               ? this.props.notes[0].description
               : ''
           }
-          theme={'snow'} // pass false to use minimal theme
+          theme={'snow'}
         />
       </div>
     )

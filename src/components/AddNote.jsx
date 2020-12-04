@@ -7,7 +7,6 @@ import firebase from '../config/firestore'
 
 const AddNote = () => {
   const dispatch = useDispatch()
-  const { notes } = useSelector(state => state.note)
 
   const initialValues = {
     category: 'general',
@@ -25,7 +24,6 @@ const AddNote = () => {
       await collection.add({ ...initialValues })
       dispatch(resetFilter())
       dispatch(addNote(initialValues))
-      //dispatch(incrementCategoryCount('general'))
     } catch (err) {
       console.log(err)
     }
