@@ -80,8 +80,11 @@ class Editor extends React.Component {
     const db = firebase.firestore()
     if (this.props.selectedNote) {
       const note = this.props.selectedNote
-      const category = cat ? value : note.category
-      const categoryColor = catColor ? value : note.categoryColor
+      const category = cat !== null ? value : note.category
+      const categoryColor = catColor !== null ? value : note.categoryColor
+
+      console.log('category is ' + category)
+      console.log('categoryColor is ' + categoryColor)
       try {
         await db
           .collection('notes')
@@ -209,7 +212,7 @@ class Editor extends React.Component {
         id: this.props.selectedNote.id,
         category: value
       })
-      this.updateNote(this.props.selectedNote.id, 'category', value)
+      this.updateNote('category', null, value)
       this.props.incrementCategoryCount(value)
     } else if (this.props.notes) {
       this.props.decrementCategoryCount(this.props.notes[0].category)

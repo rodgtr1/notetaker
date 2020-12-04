@@ -18,6 +18,8 @@ const ListItem = (note, a) => {
   const handleSelectNote = () => {
     dispatch(selectNote(note))
   }
+  console.log(note)
+
   return (
     <div
       className={`list-item ${note.selected ? 'active' : ''}`}
