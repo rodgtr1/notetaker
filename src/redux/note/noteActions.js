@@ -12,6 +12,8 @@ import {
   UPDATE_NOTE_DESCRIPTION,
   DELETE_NOTE,
   GET_CATEGORIES,
+  ADD_CATEGORY,
+  DELETE_CATEGORY,
   INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
@@ -100,6 +102,20 @@ export const getCategories = categories => {
   return {
     type: GET_CATEGORIES,
     payload: categories
+  }
+}
+
+export const addCategory = categories => {
+  return {
+    type: ADD_CATEGORY,
+    payload: categories
+  }
+}
+
+export const deleteCategory = category => {
+  return {
+    type: DELETE_CATEGORY,
+    payload: category
   }
 }
 

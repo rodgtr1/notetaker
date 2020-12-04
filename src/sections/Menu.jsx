@@ -5,13 +5,8 @@ import { connect } from 'react-redux'
 import capitalize from '../helpers/capitalize'
 import { filterByCategory, resetFilter } from '../redux/note/noteActions'
 
-import {
-  ClearOutlined,
-  TagsOutlined,
-  BarsOutlined,
-  BgColorsOutlined,
-  PlusOutlined
-} from '@ant-design/icons'
+import { ClearOutlined, PlusOutlined } from '@ant-design/icons'
+import CategoryManagement from '../components/CategoryManagement'
 
 const { Sider } = Layout
 const { SubMenu } = Menu
@@ -20,42 +15,61 @@ class MenuSection extends Component {
   state = {
     collapsed: false,
     categories: {},
-    isModalVisible: false
+    isTagsModalVisible: false,
+    isCategoriesModalVisible: false
   }
 
   onCollapse = collapsed => {
     this.setState({ collapsed })
   }
 
-  handleOk = () => {
-    this.setState({ isModalVisible: false })
+  handleTagsOk = () => {
+    this.setState({ isTagsModalVisible: false })
   }
 
-  handleCancel = () => {
-    this.setState({ isModalVisible: false })
+  handleTagsCancel = () => {
+    this.setState({ isTagsModalVisible: false })
   }
 
-  showCategoryModal = () => {
-    this.setState({ isModalVisible: !this.state.isModalVisible })
+  showTagsModal = () => {
+    this.setState({ isTagsModalVisible: !this.state.isTagsModalVisible })
+  }
+
+  handleCategoriesOk = () => {
+    this.setState({ isCategoriesModalVisible: false })
+  }
+
+  handleCategoriesCancel = () => {
+    this.setState({ isCategoriesModalVisible: false })
+  }
+
+  showCategoriesModal = () => {
+    this.setState({ isCategoriesModalVisible: !this.state.isTagsModalVisible })
   }
 
   componentDidMount() {
     document
       .getElementById('tags-plus')
-      .addEventListener('click', this.showCategoryModal)
+      .addEventListener('click', this.showTagsModal)
+    document
+      .getElementById('categories-plus')
+      .addEventListener('click', this.showCategoriesModal)
   }
 
   componentWillUnmount() {
     document
       .getElementById('tags-plus')
-      .removeEventListener('click', this.showCategoryModal)
+      .removeEventListener('click', this.showTagsModal)
+    document
+      .getElementById('categories-plus')
+      .removeEventListener('click', this.showCategoriesModal)
   }
 
   render() {
     const { collapsed } = this.state
-    const { isModalVisible } = this.state
+    const { isTagsModalVisible } = this.state
+    const { isCategoriesModalVisible } = this.state
     const categories = this.props.categories
-
     return (
       <Sider
         className='notes-menu'
@@ -66,14 +80,22 @@ class MenuSection extends Component {
       >
         <Profile />
         <Modal
-          title='Basic Modal'
-          visible={isModalVisible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          title='Tags'
+          visible={isTagsModalVisible}
+          onOk={this.handleTagsOk}
+          onCancel={this.handleTagsCancel}
         >
           <p>Some contents...</p>
           <p>Some contents...</p>
           <p>Some contents...</p>
+        </Modal>
+        <Modal
+          title='Categories'
+          visible={isCategoriesModalVisible}
+          onOk={this.handleCategoriesOk}
+          onCancel={this.handleCategoriesCancel}
+        >
+          <CategoryManagement />
         </Modal>
         <Menu
           inlineIndent={20}
@@ -82,6 +104,9 @@ class MenuSection extends Component {
           defaultOpenKeys={['sub1']}
           mode='inline'
         >
+          <span>
+            <PlusOutlined id='categories-plus' />
+          </span>
           <SubMenu key='sub1' title='CATEGORIES'>
             {categories ? (
               categories.map((category, index) => (

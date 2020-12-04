@@ -11,6 +11,8 @@ import {
   UPDATE_NOTE_DESCRIPTION,
   ADD_NOTE,
   GET_CATEGORIES,
+  ADD_CATEGORY,
+  DELETE_CATEGORY,
   INCREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
@@ -116,6 +118,16 @@ const noteReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         categories: payload
+      }
+    case ADD_CATEGORY:
+      console.log(payload)
+      return {
+        ...state,
+        categories: { ...state.categories, [payload]: 1 }
+      }
+    case DELETE_CATEGORY:
+      return {
+        ...state
       }
     case INCREMENT_CATEGORY_COUNT:
       return {

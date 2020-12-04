@@ -63,7 +63,10 @@ body {
         font-size: 12px;
         z-index: 9999;
         cursor: pointer;
-    }
+      }
+      #categories-plus{
+        margin-top: 18px;
+      }
     }
     .ant-layout-sider-trigger {
       background: #2974bb;
@@ -82,7 +85,7 @@ body {
 .ql-categoryColor {
   float: left;
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-    width:16px;
+    width: 16px;
     padding: 0;
     border: none;
     height: 16px;
@@ -93,7 +96,8 @@ body {
   }
 }
 
-.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+.ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
   border-color: rgb(218, 213, 213);
   border-right-width: 1px !important;
   outline: 0;
@@ -101,7 +105,8 @@ body {
   box-shadow: none;
 }
 
-.ant-select-single .ant-select-selector .ant-select-selection-item, .ant-select-single .ant-select-selector .ant-select-selection-placeholder {
+.ant-select-single .ant-select-selector .ant-select-selection-item,
+.ant-select-single .ant-select-selector .ant-select-selection-placeholder {
   line-height: 24px;
 }
 
