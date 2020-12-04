@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { addNote, resetFilter } from '../redux/note/noteActions'
 import firebase from '../config/firestore'
 
