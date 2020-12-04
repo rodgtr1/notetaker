@@ -16,6 +16,7 @@ import {
   getNotesFailure,
   getCategories
 } from '../redux/note/noteActions'
+import capitalize from '../helpers/capitalize'
 
 const { Title } = Typography
 
@@ -23,6 +24,10 @@ const ListSection = () => {
   const { notes } = useSelector(state => state.note)
   const searchText = useSelector(state => state.note.searchText)
   const filteredCategory = useSelector(state => state.note.filteredCategory)
+  const selectedNote = Object.values(notes).filter(
+    note => note.selected === true
+  )
+
   const dispatch = useDispatch()
 
   const combineCategories = array => {
@@ -86,7 +91,14 @@ const ListSection = () => {
   return (
     <Col span={8} className='section-wrapper notes-list'>
       <Title className='category-large' level={3} style={{ padding: '0 20px' }}>
-        General
+        {selectedNote && selectedNote.length
+          ? console.log('first' + selectedNote)
+          : console.log('second' + notes)}
+        {selectedNote && selectedNote.length
+          ? capitalize(selectedNote[0].category)
+          : notes[0]
+          ? capitalize(notes[0].category)
+          : ''}
       </Title>
       <ListFilters />
       <Search />

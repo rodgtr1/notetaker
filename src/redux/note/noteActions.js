@@ -15,6 +15,7 @@ import {
   ADD_CATEGORY,
   DELETE_CATEGORY,
   INCREMENT_CATEGORY_COUNT,
+  DECREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
   RESET_FILTER,
@@ -122,6 +123,13 @@ export const deleteCategory = category => {
 export const incrementCategoryCount = category => {
   return {
     type: INCREMENT_CATEGORY_COUNT,
+    payload: category
+  }
+}
+
+export const decrementCategoryCount = category => {
+  return {
+    type: DECREMENT_CATEGORY_COUNT,
     payload: category
   }
 }

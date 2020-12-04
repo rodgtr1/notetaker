@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Typography } from 'antd'
 import { useDispatch } from 'react-redux'
 import { selectNote } from '../redux/note/noteActions'
@@ -14,10 +14,14 @@ const ListItem = (note, a) => {
     const y = date.getFullYear()
     return String(`${m}/${d}/${y}`)
   }
+
+  const handleSelectNote = () => {
+    dispatch(selectNote(note))
+  }
   return (
     <div
-      className='list-item'
-      onClick={() => dispatch(selectNote(note))}
+      className={`list-item ${note.selected ? 'active' : ''}`}
+      onClick={() => handleSelectNote()}
       style={{ cursor: 'pointer' }}
     >
       <div className='list-item__meta'>
@@ -35,7 +39,9 @@ const ListItem = (note, a) => {
       <Text className='list-item__title subtitle' strong>
         {note.title}
       </Text>
-      <div className='list-item__preview'>{note.description.substr(0, 90).replace(/(<([^>]+)>)/gi, "")}</div>
+      <div className='list-item__preview'>
+        {note.description.substr(0, 90).replace(/(<([^>]+)>)/gi, '')}
+      </div>
     </div>
   )
 }

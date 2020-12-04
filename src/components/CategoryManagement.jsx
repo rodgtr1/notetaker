@@ -3,7 +3,7 @@ import { Tag, Input } from 'antd'
 import { TweenOneGroup } from 'rc-tween-one'
 import { PlusOutlined } from '@ant-design/icons'
 import { connect } from 'react-redux'
-import { addCategory } from '../redux/note/noteActions'
+import { addCategory, deleteCategory } from '../redux/note/noteActions'
 
 class CategoryManagement extends Component {
   constructor(props) {
@@ -17,8 +17,8 @@ class CategoryManagement extends Component {
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag)
-    console.log(tags)
     this.setState({ tags })
+    this.props.deleteCategory(removedTag)
   }
 
   showInput = () => {
@@ -36,7 +36,6 @@ class CategoryManagement extends Component {
       tags = [...tags, inputValue]
       this.props.addCategory(inputValue)
     }
-    console.log(tags)
     this.setState({
       tags,
       inputVisible: false,
@@ -115,6 +114,9 @@ const mapDispatchToProps = dispatch => {
   return {
     addCategory: category => {
       dispatch(addCategory(category))
+    },
+    deleteCategory: category => {
+      dispatch(deleteCategory(category))
     }
   }
 }

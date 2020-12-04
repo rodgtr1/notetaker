@@ -48,18 +48,18 @@ class MenuSection extends Component {
   }
 
   componentDidMount() {
-    document
-      .getElementById('tags-plus')
-      .addEventListener('click', this.showTagsModal)
+    // document
+    //   .getElementById('tags-plus')
+    //   .addEventListener('click', this.showTagsModal)
     document
       .getElementById('categories-plus')
       .addEventListener('click', this.showCategoriesModal)
   }
 
   componentWillUnmount() {
-    document
-      .getElementById('tags-plus')
-      .removeEventListener('click', this.showTagsModal)
+    // document
+    //   .getElementById('tags-plus')
+    //   .removeEventListener('click', this.showTagsModal)
     document
       .getElementById('categories-plus')
       .removeEventListener('click', this.showCategoriesModal)
@@ -124,17 +124,17 @@ class MenuSection extends Component {
               <Menu.Item key={1}>No Categories</Menu.Item>
             )}
           </SubMenu>
-          <span>
+          {/* <span>
             <PlusOutlined id='tags-plus' />
-          </span>
-          <SubMenu key='sub2' title='TAGS'>
+          </span> */}
+          {/* <SubMenu key='sub2' title='TAGS'>
             <Menu.Item key='4'>Team 1</Menu.Item>
             <Menu.Item key='5'>Team 2</Menu.Item>
           </SubMenu>
           <SubMenu key='sub3' title='COLORS'>
             <Menu.Item key='6'>Team 1</Menu.Item>
             <Menu.Item key='7'>Team 2</Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
           <Menu.Item key='8' icon={<ClearOutlined />}>
             <span onClick={() => this.props.resetFilter()}>Reset</span>
           </Menu.Item>

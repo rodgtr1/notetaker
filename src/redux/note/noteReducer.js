@@ -14,6 +14,7 @@ import {
   ADD_CATEGORY,
   DELETE_CATEGORY,
   INCREMENT_CATEGORY_COUNT,
+  DECREMENT_CATEGORY_COUNT,
   FILTER_BY_TITLE,
   FILTER_BY_CATEGORY,
   RESET_FILTER,
@@ -91,7 +92,6 @@ const noteReducer = (state = initialState, { type, payload }) => {
         notes: [...state.notes, payload]
       }
     case UPDATE_NOTE_TITLE:
-      console.log(payload)
       return {
         ...state,
         notes: state.notes.map(note =>
@@ -120,14 +120,21 @@ const noteReducer = (state = initialState, { type, payload }) => {
         categories: payload
       }
     case ADD_CATEGORY:
-      console.log(payload)
       return {
         ...state,
-        categories: { ...state.categories, [payload]: 1 }
+        categories: { ...state.categories, [payload]: 0 }
       }
     case DELETE_CATEGORY:
       return {
-        ...state
+        ...state,
+        notes: state.notes.map(note =>
+          note.category === payload
+            ? { ...note, category: 'general' }
+            : { ...note }
+        ),
+        categories: Object.fromEntries(
+          Object.entries(state.categories).filter(([key]) => key != payload)
+        )
       }
     case INCREMENT_CATEGORY_COUNT:
       return {
@@ -135,6 +142,14 @@ const noteReducer = (state = initialState, { type, payload }) => {
         categories: {
           ...state.categories,
           [payload]: state.categories[payload] + 1
+        }
+      }
+    case DECREMENT_CATEGORY_COUNT:
+      return {
+        ...state,
+        categories: {
+          ...state.categories,
+          [payload]: state.categories[payload] - 1
         }
       }
     case FILTER_BY_TITLE:
